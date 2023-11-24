@@ -13,18 +13,42 @@ import java.util.List;
 @RestController
 @RequestMapping("/villes")
 public class VilleControleur {
-   @GetMapping
+    ArrayList<Ville> villes = new ArrayList<>();
+    @GetMapping
    public List<Ville> getListeVilles() {
-        ArrayList<Ville> villes = new ArrayList<>();
-       villes.add(new Ville(25000,"JACOU"));
+
+       /*villes.add(new Ville(25000,"JACOU"));
        villes.add(new Ville(15000,"MORNE ROUGE"));
        villes.add(new Ville(53400,"NARBONNE"));
        villes.add(new Ville(484000,"LYON"));
        villes.add(new Ville(35000,"MONTPELLIER"));
-       villes.add(new Ville(77200,"PAU"));
+       villes.add(new Ville(77200,"PAU"));*/
 
        return villes;
    }
+   /*@GetMapping("")
+   public Ville getVille(@PathVariable) {
 
+   }*/
+    @PutMapping
+    public String ajouterVilles(@RequestBody Ville nvVille) {
+        if (!villes.contains(nvVille)) {
+            villes.add(nvVille);
+            return "la ville a été créée avec succès";
+        }
+        return "La ville existe déja";
+
+    }
+    @PostMapping("/{id}")
+    public String modifierVille(@PathVariable int id, @RequestBody Ville nvVille) {
+        for (Ville v: villes) {
+            if(v.getId()==id) {
+                v.setNom(nvVille.getNom());
+                v.setNbHabitants(nvVille.getNbHabitants());
+                return"la ville a étét modfiée avec succès";
+            }
+        }
+        return " la ville existe déjà";
+    }
 
 }
