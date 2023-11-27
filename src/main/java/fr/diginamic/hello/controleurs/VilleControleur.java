@@ -39,18 +39,18 @@ public class VilleControleur {
      * Une méthode pour créer  une  ville : PUT
      */
     @PutMapping
-    public String ajouterVilles(@RequestBody Ville nvVille) {
+    public ResponseEntity<String> ajouterVilles(@RequestBody Ville nvVille) {
 
         if(nvVille.getId()==0) {
-            return "la ville doit obligatoirement avoir un ID";
+            return ResponseEntity.badRequest().body("la ville doit obligatoirement avoir un ID");
         }
         for(Ville v : villes) {
             if (v.getId() == nvVille.getId()){
-                return  "Une ville avec le même id existe déjà";
+                return ResponseEntity.badRequest().body("Une ville avec le même id existe déjà");
             }
         }
         villes.add(nvVille);
-        return  "la ville a été ajoutée avec succès";
+        return ResponseEntity.ok("la ville a été ajoutée avec succès") ;
 
     }
 
@@ -58,31 +58,31 @@ public class VilleControleur {
      * Une méthode pour modifier  une  ville : POST
      */
     @PostMapping("/{id}")
-    public String modifierVille(@PathVariable int id, @RequestBody Ville nvVille) {
+    public ResponseEntity<String> modifierVille(@PathVariable int id, @RequestBody Ville nvVille) {
 
         for (Ville v : villes) {
             if (v.getId() == id) {
                 v.setNom(nvVille.getNom());
                 v.setNbHabitants(nvVille.getNbHabitants());
-                return "la ville a été modfiée avec succès";
+                return ResponseEntity.ok("la ville a été modfiée avec succès");
             }
         }
-        return " la ville existe déjà";
+        return ResponseEntity.badRequest().body(" la ville existe déjà");
     }
 
     /**
      * Une méthode pour supprimer  une  ville par son ID : DELETE
      */
     @DeleteMapping("/{id}")
-    public String suprimeVille(@PathVariable int id) {
+    public ResponseEntity<String> suprimeVille(@PathVariable int id) {
         Iterator<Ville> iterator = villes.iterator();
         while (iterator.hasNext()) {
             Ville v = iterator.next();
             if (v.getId() == id) {
                 iterator.remove();
-                return "Ville supprimée avec succès.";
+                return ResponseEntity.ok("Ville supprimée avec succès.");
             }
         }
-        return "Ville non trouvée avec l'ID : " + id;
+        return ResponseEntity.badRequest().body("Ville non trouvée avec l'ID : " + id);
     }
 }
