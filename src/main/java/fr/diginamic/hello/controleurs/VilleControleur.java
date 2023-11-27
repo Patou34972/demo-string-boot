@@ -8,30 +8,32 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
 @RequestMapping("/villes")
 public class VilleControleur {
-    ArrayList<Ville> villes = new ArrayList<>();
+    private List<Ville> villes = new ArrayList<>();
+
     @GetMapping
-   public List<Ville> getListeVilles() {
+    public List<Ville> getVilles() {
+        return villes;
+    }
 
-       /*villes.add(new Ville(25000,"JACOU"));
-       villes.add(new Ville(15000,"MORNE ROUGE"));
-       villes.add(new Ville(53400,"NARBONNE"));
-       villes.add(new Ville(484000,"LYON"));
-       villes.add(new Ville(35000,"MONTPELLIER"));
-       villes.add(new Ville(77200,"PAU"));*/
+    @GetMapping("/{id}")
+    public Ville getListeVilleById(@PathVariable int id) {
+        for (Ville v : villes) {
+            if (v.getId() == id) {
+                return v;
+            }
+        }
+        return null;
+    }
 
-       return villes;
-   }
-   /*@GetMapping("")
-   public Ville getVille(@PathVariable) {
-
-   }*/
     @PutMapping
     public String ajouterVilles(@RequestBody Ville nvVille) {
+
         if (!villes.contains(nvVille)) {
             villes.add(nvVille);
             return "la ville a été créée avec succès";
@@ -39,16 +41,30 @@ public class VilleControleur {
         return "La ville existe déja";
 
     }
+
     @PostMapping("/{id}")
     public String modifierVille(@PathVariable int id, @RequestBody Ville nvVille) {
-        for (Ville v: villes) {
-            if(v.getId()==id) {
+
+        for (Ville v : villes) {
+            if (v.getId() == id) {
                 v.setNom(nvVille.getNom());
                 v.setNbHabitants(nvVille.getNbHabitants());
-                return"la ville a étét modfiée avec succès";
+                return "la ville a été modfiée avec succès";
             }
         }
         return " la ville existe déjà";
     }
 
+    @DeleteMapping("/{id}")
+    public String suprimeVille(@PathVariable int id) {
+        Iterator<Ville> iterator = villes.iterator();
+        while (iterator.hasNext()) {
+            Ville v = iterator.next();
+            if (v.getId() == id) {
+                iterator.remove();
+                return "Ville supprimée avec succès.";
+            }
+        }
+        return "Ville non trouvée avec l'ID : " + id;
+    }
 }
