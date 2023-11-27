@@ -16,6 +16,10 @@ import java.util.List;
 public class VilleControleur {
     private List<Ville> villes = new ArrayList<>();
 
+    /**
+     * Une méthode pour Extrait toutes les villes
+     * @return villes
+     */
     @GetMapping
     public List<Ville> getVilles() {
         return villes;
@@ -31,17 +35,28 @@ public class VilleControleur {
         return null;
     }
 
+    /**
+     * Une méthode pour créer  une  ville : PUT
+     */
     @PutMapping
     public String ajouterVilles(@RequestBody Ville nvVille) {
 
-        if (!villes.contains(nvVille)) {
-            villes.add(nvVille);
-            return "la ville a été créée avec succès";
+        if(nvVille.getId()==0) {
+            return "la ville doit obligatoirement avoir un ID";
         }
-        return "La ville existe déja";
+        for(Ville v : villes) {
+            if (v.getId() == nvVille.getId()){
+                return  "Une ville avec le même id existe déjà";
+            }
+        }
+        villes.add(nvVille);
+        return  "la ville a été ajoutée avec succès";
 
     }
 
+    /**
+     * Une méthode pour modifier  une  ville : POST
+     */
     @PostMapping("/{id}")
     public String modifierVille(@PathVariable int id, @RequestBody Ville nvVille) {
 
@@ -55,6 +70,9 @@ public class VilleControleur {
         return " la ville existe déjà";
     }
 
+    /**
+     * Une méthode pour supprimer  une  ville par son ID : DELETE
+     */
     @DeleteMapping("/{id}")
     public String suprimeVille(@PathVariable int id) {
         Iterator<Ville> iterator = villes.iterator();
