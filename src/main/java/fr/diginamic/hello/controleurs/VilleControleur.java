@@ -2,6 +2,7 @@ package fr.diginamic.hello.controleurs;
 
 
 import fr.diginamic.hello.controleurs.services.entites.Ville;
+import fr.diginamic.hello.controleurs.services.entites.dao.VilleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,75 +15,61 @@ import java.util.List;
 @RestController
 @RequestMapping("/villes")
 public class VilleControleur {
-    private List<Ville> villes = new ArrayList<>();
+    @Autowired
+    private VilleDao villeDao;
 
     /**
      * Une méthode pour Extrait toutes les villes
-     * @return villes
+     * @return villeDao.extraitAll();
      */
     @GetMapping
     public List<Ville> getVilles() {
-        return villes;
-    }
-
-    @GetMapping("/{id}")
-    public Ville getListeVilleById(@PathVariable int id) {
-        for (Ville v : villes) {
-            if (v.getId() == id) {
-                return v;
-            }
-        }
-        return null;
+        return villeDao.extraitAll();
     }
 
     /**
-     * Une méthode pour créer  une  ville : PUT
+     * Une méthode pour Extrait une ville par son ID
+     * @return villeDao. extraitById(id);
+     */
+    @GetMapping("/{id}")
+    public Ville getVilleById(@PathVariable int id) {
+        return villeDao. extraitById(id);
+    }
+
+    /**
+     * Une méthode pour Extrait une ville par son nom
+     * @return villeDao.extraitByName(nom);
+     */
+   /* @GetMapping("/{nom}")
+    public Ville getVilleByName(@PathVariable String nom) {
+        return villeDao.extraitByName(nom);
+    }*/
+
+    /**
+     * Une méthode pour ajouter  une ville
+     * @return villeDao.insert(nvVille);
      */
     @PutMapping
     public ResponseEntity<String> ajouterVilles(@RequestBody Ville nvVille) {
-
-        if(nvVille.getId()==0) {
-            return ResponseEntity.badRequest().body("la ville doit obligatoirement avoir un ID");
-        }
-        for(Ville v : villes) {
-            if (v.getId() == nvVille.getId()){
-                return ResponseEntity.badRequest().body("Une ville avec le même id existe déjà");
-            }
-        }
-        villes.add(nvVille);
-        return ResponseEntity.ok("la ville a été ajoutée avec succès") ;
-
+        return villeDao.insertVille(nvVille);
     }
 
     /**
-     * Une méthode pour modifier  une  ville : POST
+     * Une méthode pour modifier  une  ville
+     * @return villeDao.modifVille(id, villeModifiee);
      */
-    @PostMapping("/{id}")
-    public ResponseEntity<String> modifierVille(@PathVariable int id, @RequestBody Ville nvVille) {
+   @PostMapping("/{id}")
+    public ResponseEntity<String> modifierVille(@PathVariable int id, @RequestBody Ville villeModifiee) {
 
-        for (Ville v : villes) {
-            if (v.getId() == id) {
-                v.setNom(nvVille.getNom());
-                v.setNbHabitants(nvVille.getNbHabitants());
-                return ResponseEntity.ok("la ville a été modfiée avec succès");
+                return villeDao.modifVille(id, villeModifiee);
             }
-        }
-        return ResponseEntity.badRequest().body(" la ville existe déjà");
-    }
 
     /**
-     * Une méthode pour supprimer  une  ville par son ID : DELETE
+     * Une méthode pour supprimer  une  ville par son ID
+     *  * @return villeDao.deleteVille(id);
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> suprimeVille(@PathVariable int id) {
-        Iterator<Ville> iterator = villes.iterator();
-        while (iterator.hasNext()) {
-            Ville v = iterator.next();
-            if (v.getId() == id) {
-                iterator.remove();
-                return ResponseEntity.ok("Ville supprimée avec succès.");
-            }
-        }
-        return ResponseEntity.badRequest().body("Ville non trouvée avec l'ID : " + id);
+        return villeDao.deleteVille(id);
     }
 }

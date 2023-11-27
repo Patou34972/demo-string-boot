@@ -1,12 +1,22 @@
 package fr.diginamic.hello.controleurs.services.entites;
 
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
+@Entity
 public class Ville {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column
     String nom;
+    @Column
     int nbHabitants;
+
+    public Ville() {
+    }
 
     public Ville(int id, int nbHabitants, String nom) {
         this.id = id;
