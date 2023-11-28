@@ -40,10 +40,10 @@ public class VilleControleur {
      * Une méthode pour Extrait une ville par son nom
      * @return villeDao.extraitByName(nom);
      */
-   /* @GetMapping("/{nom}")
+    @GetMapping("/nom/{nom}")
     public Ville getVilleByName(@PathVariable String nom) {
         return villeDao.extraitByName(nom);
-    }*/
+    }
 
     /**
      * Une méthode pour ajouter  une ville

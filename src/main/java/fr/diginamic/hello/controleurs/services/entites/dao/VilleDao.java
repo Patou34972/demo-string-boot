@@ -22,12 +22,12 @@ public class VilleDao {
     public Ville extraitById(int id) {
         return em.find(Ville.class, id);
     }
-    /*public Ville extraitByName(String nom) {
+    public Ville extraitByName(String nom) {
         TypedQuery<Ville> query1 = em.createQuery("SELECT v FROM Ville v WHERE v.nom = :nom", Ville.class);
         query1.setParameter("nom", nom);
          return  query1.getSingleResult();
 
-    }*/
+    }
 
     @Transactional
     public ResponseEntity<String> insertVille(Ville nvVille) {
