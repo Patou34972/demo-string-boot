@@ -28,6 +28,15 @@ public class VilleDao {
          return  query1.getSingleResult();
 
     }
+    public Ville nPlusGrandesVillesParDepartement(String nomDep) {
+        TypedQuery<Ville> query2 = em.createQuery("SELECT v FROM Ville v WHERE v.departement.nom = :nom order by v.nbHabitants desc", Ville.class);
+        query2.setParameter("nom", nomDep);
+        if (!query2.getResultList().isEmpty()) {
+            return query2.getResultList().get(0);
+        }
+        return null;
+    }
+
 
     @Transactional
     public ResponseEntity<String> insertVille(Ville nvVille) {

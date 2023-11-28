@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+
 import java.util.List;
 
 @RestController
@@ -43,6 +41,15 @@ public class VilleControleur {
     @GetMapping("/nom/{nom}")
     public Ville getVilleByName(@PathVariable String nom) {
         return villeDao.extraitByName(nom);
+    }
+
+    /**
+     * Une méthode pour Extrait la plus grande ville dans un departement
+     * @return villeDao.nPlusGrandesVillesParDepartement(nomDep, n);
+     */
+    @GetMapping("/departements/grand/{nomDep}")
+    public Ville getBigVille(@PathVariable String nomDep) {
+        return villeDao.nPlusGrandesVillesParDepartement(nomDep);
     }
 
     /**
