@@ -3,6 +3,8 @@ package fr.diginamic.hello.controleurs;
 
 import fr.diginamic.hello.controleurs.services.entites.Ville;
 import fr.diginamic.hello.controleurs.services.entites.dao.VilleDao;
+import fr.diginamic.hello.controleurs.services.entites.dao.VilleRepository;
+import fr.diginamic.hello.controleurs.services.entites.dao.exception.AnomalieException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +17,19 @@ import java.util.List;
 public class VilleControleur {
     @Autowired
     private VilleDao villeDao;
+    @Autowired
+    private VilleRepository villeRepository;
 
     /**
      * Une méthode pour Extrait toutes les villes
-     * @return villeDao.extraitAll();
+     * @return villes;
      */
     @GetMapping
-    public List<Ville> getVilles() {
-        return villeDao.extraitAll();
+    public Iterable<Ville> getVilles() {
+        Iterable<Ville> villes = villeRepository.findAll();
+        return villes;
     }
+
 
     /**
      * Une méthode pour Extrait une ville par son ID
@@ -31,16 +37,20 @@ public class VilleControleur {
      */
     @GetMapping("/{id}")
     public Ville getVilleById(@PathVariable int id) {
-        return villeDao. extraitById(id);
+        Ville ville = villeRepository.findById(id);
+        return ville;
+        /*return villeDao. extraitById(id);*/
     }
 
     /**
      * Une méthode pour Extrait une ville par son nom
-     * @return villeDao.extraitByName(nom);
+     * @return ville
      */
     @GetMapping("/nom/{nom}")
     public Ville getVilleByName(@PathVariable String nom) {
-        return villeDao.extraitByName(nom);
+        Ville ville = villeRepository.findByNom(nom);
+        return ville;
+       /* return villeDao.extraitByName(nom);*/
     }
 
     /**
@@ -48,17 +58,23 @@ public class VilleControleur {
      * @return villeDao.nPlusGrandesVillesParDepartement(nomDep, n);
      */
     @GetMapping("/departements/grand/{nomDep}")
-    public Ville getBigVille(@PathVariable String nomDep) {
-        return villeDao.nPlusGrandesVillesParDepartement(nomDep);
+    public Iterable<Ville>getBigVille(@PathVariable String nomDep) {
+        Iterable<Ville> ville = villeRepository.extractVilleByMaxPopulation(nomDep);
+        return ville;
+       /* return villeDao.nPlusGrandesVillesParDepartement(nomDep);*/
     }
+
+
 
     /**
      * Une méthode pour ajouter  une ville
      * @return villeDao.insert(nvVille);
      */
     @PutMapping
-    public ResponseEntity<String> ajouterVilles(@RequestBody Ville nvVille) {
-        return villeDao.insertVille(nvVille);
+    public Ville ajouterVilles(@RequestBody Ville nvVille) {
+        Ville ville = villeRepository.save(nvVille);
+        return ville;
+        /*return villeDao.insertVille(nvVille);*/
     }
 
     /**

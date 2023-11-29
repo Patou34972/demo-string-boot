@@ -36,6 +36,19 @@ public class VilleDao {
         }
         return null;
     }
+   /* public  List<Ville> villesMaxMin(String nomDep) {
+        TypedQuery<Ville> query3 = em.createQuery("SELECT v.nom AS nom_ville, v.nbHabitants, d.nom AS nom_departement, d.code\n" +
+                "FROM Ville v\n" +
+                "JOIN v.departement d\n" +
+                "WHERE d.nom = :nomDepartement\n" +
+                "  AND v.nbHabitants BETWEEN :minPopulation AND :maxPopulation\n", Ville.class);
+        query3.setParameter("nom", nomDep);
+        if (!query3.getResultList().isEmpty()) {
+            return query3.getResultList();
+        }
+        return null;
+
+    }*/
 
 
     @Transactional
