@@ -71,7 +71,17 @@ public class VilleControleur {
      * @return villeDao.insert(nvVille);
      */
     @PutMapping
-    public Ville ajouterVilles(@RequestBody Ville nvVille) {
+    public Ville ajouterVilles(@RequestBody Ville nvVille) throws AnomalieException {
+       if( nvVille.getNbHabitants()<10) {
+           throw new AnomalieException("La ville doit avoir au moins 10 habitants");
+       }
+        if( nvVille.getNom().length()<2) {
+            throw new AnomalieException("La ville doit avoir un nom contenant au moins 2 lettres");
+        }
+
+        if(villeRepository.existsByNomAndCodeDepartement(nvVille.getNom(),nvVille.getDepartement().getCode() ) ) {
+            throw new AnomalieException("La ville que vous souhaitez insérer existe déjà avec le departement");
+        }
         Ville ville = villeRepository.save(nvVille);
         return ville;
         /*return villeDao.insertVille(nvVille);*/

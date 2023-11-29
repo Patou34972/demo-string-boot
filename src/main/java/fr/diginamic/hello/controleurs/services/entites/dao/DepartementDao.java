@@ -35,7 +35,7 @@ public class DepartementDao {
         return ResponseEntity.ok("Departement ajoutée avec succès");
     }
 
-    @Transactional
+   @Transactional
     public ResponseEntity<String> modifDepartement (int id, Departement departementModif) {
         Departement departementFromDb = em.find(Departement.class, id);
         if ( departementFromDb!=null) {

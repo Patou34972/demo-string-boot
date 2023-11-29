@@ -15,6 +15,6 @@ public interface VilleRepository extends CrudRepository<Ville, Integer> {
     Iterable<Ville> extractVilleByMaxPopulation(String nomDep);
 
     Ville save( Ville nvville);
-
-
+   @Query("SELECT COUNT(v) > 0 FROM Ville v WHERE v.nom = :nom AND v.departement.code = :code")
+   boolean existsByNomAndCodeDepartement(String nom, String code);
 }

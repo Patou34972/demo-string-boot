@@ -2,6 +2,7 @@ package fr.diginamic.hello.controleurs;
 
 import fr.diginamic.hello.controleurs.services.entites.Departement;
 import fr.diginamic.hello.controleurs.services.entites.dao.DepartementDao;
+import fr.diginamic.hello.controleurs.services.entites.dao.exception.AnomalieException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +48,10 @@ public class DepartementControleur {
      * @return departementDao.insertDepartement(nvDepartement);
      */
     @PutMapping
-    public ResponseEntity<String> ajouterDepatement(@RequestBody Departement nvDepartement) {
+    public ResponseEntity<String> ajouterDepatement(@RequestBody Departement nvDepartement) throws AnomalieException {
+        if( nvDepartement.getCode().length() < 2) {
+            throw new AnomalieException("Le code département doit avoir exactement 2 caractères");
+        }
         return departementDao.insertDepartement(nvDepartement);
     }
 

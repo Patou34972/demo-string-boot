@@ -13,14 +13,14 @@ public class Departement {
     @Column
     String nom;
     @Column
-    int code;
+    String code;
     @OneToMany(mappedBy="departement")
     private Set<Ville> villes;
 
     public Departement() {
     }
 
-    public Departement(String nom, int code, Set<Ville> villes) {
+    public Departement(String nom, String code, Set<Ville> villes) {
         this.nom = nom;
         this.code = code;
         this.villes = villes;
@@ -42,11 +42,11 @@ public class Departement {
         this.nom = nom;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
